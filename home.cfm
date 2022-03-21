@@ -14,7 +14,9 @@
                
                 logger = new inc.components.logger(variables.DATABASE_datasource);
 
+                Mcomps = arrayNew(1);
                 Mcomps = logger.displayOnScreen();
+
                 for ( iMcomp in Mcomps ) {
                     arrayAppend(materializeCompsToInit, iMcomp ); 
                 };
@@ -41,8 +43,6 @@
                         aField = loggerStruct.fields[aFieldProp];
                         if(isdefined("form."&aFieldProp)){
                             aField = loggerStruct.fields[aFieldProp];
-                            writeDump(#aField#);
-                            writeDump(#form[aFieldProp]#);
 
                             if( aField.type == "datepicker"){
                                 aAmount = 0;

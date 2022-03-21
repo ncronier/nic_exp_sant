@@ -12,8 +12,9 @@ component displayname="Logger Field" output="true" accessors="true"
 
 	property name="levels" type="array";
 
-	property name="blockId" type="array";
+	property name="blockId" type="string";
 	property name="block" type="component";
+
 
 	property name="defaultChecked" type="boolean";
 	property name="defaultValue" type="numeric";
@@ -23,29 +24,49 @@ component displayname="Logger Field" output="true" accessors="true"
 
     public function init(
 		required string dataSource
-		,required query measure_row
+		,required struct measure_row
 	){
 		setDataSource(arguments.dataSource);
 
 		setId(arguments.measure_row.id);
+		setBlockId(arguments.measure_row.block_id)
 		setType(arguments.measure_row.type);
 		setName(arguments.measure_row.name);
 		setDescription(arguments.measure_row.description);
 		setUnit(arguments.measure_row.unit);
-		setRange(arguments.measure_row.range);
-		setStep(arguments.measure_row.step);
+		if( len(arguments.measure_row.range) > 0){
+			setRange(arguments.measure_row.range);
+		}else{	
+			setRange(0);
+		};
+		if( len(arguments.measure_row.step) > 0){
+			setStep(arguments.measure_row.step);
+		}else{	
+			setStep(0);
+		};
 
-		setBlockId(arguments.measure_row.block_id);
-		
 		setLevels(arrayNew(1));
 		if(getType() == "level_select"){
 			populateLevels();
 		};
+		if( len(arguments.measure_row.default_checked) > 0){
+			setDefaultChecked(arguments.measure_row.default_checked);
+		}else{
+			setDefaultChecked(0);
+		};
+		if( len(arguments.measure_row.default_value) > 0){
+			setDefaultValue(arguments.measure_row.default_value);
+		}else{
+			setDefaultValue(0);
+		};
+		if( len(arguments.measure_row.default_level_num) > 0){
+			setDefaultLevelNum(arguments.measure_row.default_level_num);
+		}else{
+			setDefaultLevelNum(0);
+		};
 
-		setDefaultChecked(arguments.measure_row.default_checked);
 		
-		setDefaultValue(arguments.measure_row.default_value);
-		setDefaultLevelNum(arguments.measure_row.default_level_num);
+
 		if( getType() == "date_range"){
 			setDefaultDateRange( arguments.measure_row.default_custom_value );
 		};
@@ -117,7 +138,7 @@ component displayname="Logger Field" output="true" accessors="true"
 		};
 		newDate =  CreateDateTime(Year(Now()), Month(Now()), Day(Now()), aHour, aMin, 00);
 
-		switch(argument.refDate){
+		switch(arguments.refDate){
 			case "yesterday":
 				newDate = dateAdd("d", 1, newDate) ;
 				break;

@@ -1,5 +1,7 @@
 component displayname="Logger Block" output="true" accessors="true" 
 {
+	property name="dataSource" type="string";
+
 	property name="id" type="string";
 	property name="title" type="string";
    	property name="colorClass" type="string";
@@ -14,12 +16,13 @@ component displayname="Logger Block" output="true" accessors="true"
 	){
 		setDataSource(arguments.dataSource);
 
-		setColorIdarguments.blockRow.title);
-		setColorTitle(arguments.blockRow.title);
+		setId(arguments.blockRow.block_id);
+		setTitle(arguments.blockRow.title);
 		setColorClass(arguments.blockRow.color_class);
 
 		//setColumnClass(arguments.columnClass);
 		setColumnClass("s12 m6 l4 xl3");
+		setLogger(arguments.logger);
         variables.measures = arrayNew(1);
 		populateMeasures();
     }
@@ -43,10 +46,11 @@ component displayname="Logger Block" output="true" accessors="true"
 	}
 
 	public function populateMeasures(){
-		for(iMeasure in getLogger.getMeasures() ){
-			if(iMeasure.getBlockID() == getID()){
-				arrayAppend(variables.measures, iMeasure);
-				iMeasure.setBlock(this);
+		for(iMeasureKey in getLogger().getMeasures() ){
+
+			if( getLogger().getMeasures()[iMeasureKey].getBlockId() == getID() ){
+				arrayAppend(variables.measures, getLogger().getMeasures()[iMeasureKey]);
+				getLogger().getMeasures()[iMeasureKey].setBlock(this);
 			}
 		};
 	}
