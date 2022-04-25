@@ -1,50 +1,27 @@
 component displayname="Logger" output="true" accessors="true"
 {
 	property name="dataSource" type="string";
-	property name="templatePath" type="string";
 
-	property name="mode" type="string" hint="log for entering data, confirm for comfirming the form submit";
 	property name="measures" type="struct" hint="each key is the id of a measure and the value is a measure component";
-	property name="blocks" type="array" hint="blocks are visual cards that contain a number of measures";
+	property name="charts" type="array" hint="charts already set in the db - charts table";
 
 
-    public function init(required string dataSource, required string templatePath, string mode){
+    public function init(required string dataSource, string mode){
 		
 		setDataSource(arguments.dataSource);
-		setTemplatePath(arguments.templatePath);
-
-		if(isdefined("arguments.mode")){
-			setMode(arguments.mode);
-		}else{
-			setMode("log");
-		}
+ 
 		variables.measures = structNew();
 		populateMeasures();
 
-		variables.blocks = arrayNew(1);
-		populateBlocks();
+		variables.charts = arrayNew(1);
+		populateCharts();
 		//writeDump(this);
     }
 
 
-    public function setVal(
-        required string attr, 
-        required any val = "")
-        {
-
-        variables[arguments.attr] = arguments.val;
-    }
-
-    public function getVal(required string attr){
-        return variables[arguments.attr];
-    }
-
-	public function addBlock(required component block){
-		arrayAppend(variables.blocks, arguments.block);
-	};
 
 	public function populateMeasures(){
-		 getMeasuresQuery = queryExecute(
+		getMeasuresQuery = queryExecute(
             "SELECT     m.id
 						,m.type
 						,m.name
@@ -60,8 +37,8 @@ component displayname="Logger" output="true" accessors="true"
 						,mdv.level_num as default_level_num
 						,mdv.custom	as default_custom_value
 
-            FROM 	    measures AS m
-            LEFT JOIN   measure_default_values AS mdv ON m.id = mdv.measure_id
+            FROM 	    measure_logs AS ml
+            LEFT JOIN   measures AS m ON m.id = ml.measure_id
 			WHERE		user_id = :user_id
 			",
             {
@@ -86,27 +63,6 @@ component displayname="Logger" output="true" accessors="true"
 			if( iMeasure.isCheckedInLogForm() ){
 				//the measure was checked - lets' log it
 				iMeasure.insertInDB();
-			}
-		}
-	}
-
-
-
-	public function checkUseCustomTime(){
-		if(isdefined("variables.measures.custom_time")){
-			iMeasure = variables.measures["custom_time"];
-			return iMeasure.getCurrentChecked()
-		}else{
-			return false;
-		}
-	}
-
-	
-	public function getCustomTime(){
-		if(isdefined("variables.measures.custom_time")){
-			iMeasure = variables.measures["custom_time"];
-			if(iMeasure.getCurrentChecked() ){
-				return iMeasure.getCurrentDateTime();
 			}
 		}
 	}

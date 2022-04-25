@@ -198,6 +198,9 @@
 		<link rel="shortcut icon" href="<cfoutput>#variables.templatePath#</cfoutput>favicon.ico" />
 
 		<script type="text/javascript" src="<cfoutput>#variables.templatePath#</cfoutput>js/scripts.js"></script>
+		<link rel="stylesheet" type="text/css" href="<cfoutput>#variables.templatePath#</cfoutput>css/main.css">
+
+		
 		<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,300i,400,400i,600,600i,700,700i" rel="stylesheet" type="text/css">
 		<link type="text/css" rel="stylesheet" media="all" href="<cfoutput>#variables.templatePath#</cfoutput>css/main.css" />
 		<link rel="stylesheet" type="text/css" href="<cfoutput>#variables.templatePath#</cfoutput>css/WebfontsKit.css">
